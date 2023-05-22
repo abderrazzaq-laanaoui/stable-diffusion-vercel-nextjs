@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 function Home() {
   const [inputValue, setInputValue] = useState('');
+  const [lang, setLang] = useState('en'); //['en', 'ar', 'fr', 'dr']
   const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +15,7 @@ function Home() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ value: inputValue }),
+      body: JSON.stringify({ value: inputValue, lang }),
     });
 
     if (response.ok) {
@@ -39,6 +40,36 @@ function Home() {
               className="w-full px-5 py-3 text-gray-700 bg-gray-200 rounded"
               placeholder="Enter a prompt..."
             />
+            {/* a label with language as value */}
+            <div className="relative inline-flex items-center w-full">
+            <label className=" mb-2 mr-5 text-sm font-bold text-gray-700">
+              Language
+            </label>
+            {/* Lang selection */}
+            <div className="relative inline-flex">
+              <svg
+                className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 412 232"
+              >
+                <path
+                  d="M0 0l192 192L412 0H0z"
+                  fill="currentColor"
+                  fillRule="nonzero"
+                />
+              </svg>
+              <select
+                value={lang}
+                onChange={(e) => setLang(e.target.value)}
+                className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
+              >
+                <option value="en">English</option>
+                <option value="ar">Arabic</option>
+                <option value="fr">French</option>
+                <option value="dr">Darija</option>
+              </select>
+              </div>
+            </div>
             <button type="submit" className="w-full px-3 py-4 text-white bg-gradient-to-r from-cyan-400 via-green-500 to-cyan-400 rounded-md focus:outline-none" disabled={loading}>
               Submit
             </button>
