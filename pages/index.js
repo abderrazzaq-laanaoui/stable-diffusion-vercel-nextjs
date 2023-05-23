@@ -1,5 +1,27 @@
+import Header from '@/components/header';
 import { useState } from 'react';
+import ImageGallery from '@/components/ImageGallery';
 
+const texts = {
+  placeholder: {
+    en: 'Enter your text here...',
+    fr: 'Entrez votre texte ici...',
+    ar: 'أدخل نصك هنا...',
+    dr: 'كتب شي حاجة هنا...',
+  },
+  label: {
+    en: 'Language',
+    fr: 'Langue',
+    ar: 'اللغة',
+    dr: 'اللغة',
+  },
+  submit: {
+    en: 'Submit',
+    fr: 'Soumettre',
+    ar: 'إرسال',
+    dr: 'صيفط',
+  },
+};
 function Home() {
   const [inputValue, setInputValue] = useState('');
   const [lang, setLang] = useState('en'); //['en', 'ar', 'fr', 'dr']
@@ -28,70 +50,89 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-green-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="w-full px-5 py-3 text-gray-700 bg-gray-200 rounded"
-              placeholder="Enter a prompt..."
-            />
-            {/* a label with language as value */}
-            <div className="relative inline-flex items-center w-full">
-            <label className=" mb-2 mr-5 text-sm font-bold text-gray-700">
-              Language
+    <div className="flex flex-col h-screen">
+      <Header />
+      <div className="flex flex-1">
+        <aside className="bg-gray-200 p-4 flex flex-col w-1/3">
+          <form onSubmit={handleSubmit} className="space-y-4" 
+          dir={(lang === 'ar' || lang==='dr') ? 'rtl' : 'ltr'}
+          >
+        <textarea
+          rows={4}
+          cols={50}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className="w-full px-5 py-3 text-gray-700 bg-gray-100 rounded resize-none"
+          placeholder={texts.placeholder[lang]}
+        />
+         <div className="relative inline-flex items-center w-full">
+            <label
+              htmlFor="language"
+              className="mb-2 text-sm font-bold text-gray-700"
+            >
+              {texts.label[lang]}
             </label>
-            {/* Lang selection */}
-            <div className="relative inline-flex">
-              <svg
-                className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 412 232"
-              >
-                <path
-                  d="M0 0l192 192L412 0H0z"
-                  fill="currentColor"
-                  fillRule="nonzero"
-                />
-              </svg>
+            <div className="relative mx-5">
               <select
+                id="language"
                 value={lang}
                 onChange={(e) => setLang(e.target.value)}
-                className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
+                className="block appearance-none w-full bg-gray-100 border border-gray-400 hover:border-gray-500 px-4 py-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               >
                 <option value="en">English</option>
-                <option value="ar">Arabic</option>
                 <option value="fr">French</option>
-                <option value="dr">Darija</option>
+                <option value="ar">العربية</option>
+                <option value="dr">الدارجة</option>
               </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 12l-5-5 1.5-1.5L10 9.01l3.5-3.5L15 7l-5 5z"
+                  />
+                </svg>
               </div>
             </div>
-            <button type="submit" className="w-full px-3 py-4 text-white bg-gradient-to-r from-cyan-400 via-green-500 to-cyan-400 rounded-md focus:outline-none" disabled={loading}>
-              Submit
+          </div>
+            <button
+              type="submit"
+              className="w-full px-3 py-3 text-white font-medium bg-gradient-to-r from-cyan-400 via-green-500 to-cyan-400 rounded-md focus:outline-none disabled:opacity-50"
+              disabled={loading || inputValue.length < 3}
+            >
+              {texts.submit[lang]}
             </button>
           </form>
-        </div>
+        </aside>
+        <main className="flex-1 p-4">
+          {loading && (
+            <div className="flex justify-center">
+              <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+            </div>
+          )}
+          {imageUrl && !loading && (
+            <div className="flex justify-center">
+              <img
+                src={imageUrl}
+                alt="Generated image"
+                className="rounded-xl shadow-lg"
+              />
+            </div>
+          )}
+          <div className="flex justify-center absolute bottom-0 right-0 w-full h-50 background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');">
+          <ImageGallery images={[]} />
+
+          </div>
+        </main>
       </div>
-      {loading && (
-        <div className="mt-12 flex justify-center">
-          <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
-        </div>
-      )}
-      {imageUrl && !loading && (
-        <div className="mt-12 flex justify-center">
-          <img src={imageUrl} alt="Generated image" className="rounded-xl shadow-lg" />
-        </div>
-      )}
       <style jsx>{`
         .loader {
           animation: spin 1s linear infinite;
           border-top-color: #3498db;
         }
-
         @keyframes spin {
           0% {
             transform: rotate(0deg);
