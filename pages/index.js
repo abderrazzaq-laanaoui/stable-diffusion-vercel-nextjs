@@ -1,6 +1,5 @@
 import Header from '@/components/header';
 import { useState } from 'react';
-import ImageGallery from '@/components/ImageGallery';
 
 const texts = {
   placeholder: {
@@ -114,18 +113,30 @@ function Home() {
             </div>
           )}
           {imageUrl && !loading && (
+                <div className="flex flex-col items-center">
+
             <div className="flex justify-center">
               <img
+                width={500}
+                height={500}
                 src={imageUrl}
                 alt="Generated image"
                 className="rounded-xl shadow-lg"
               />
             </div>
-          )}
-          <div className="flex justify-center absolute bottom-0 right-0 w-full h-50 background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');">
-          <ImageGallery images={[]} />
-
+            <div className="flex justify-center mt-4">
+            <a
+              target='_blank'
+              href={imageUrl}
+              download
+              className="px-4 py-2 text-white font-medium bg-blue-500 rounded-md focus:outline-none hover:bg-blue-700"
+            >
+              Download
+            </a>
           </div>
+          </div>
+          )}
+          
         </main>
       </div>
       <style jsx>{`
