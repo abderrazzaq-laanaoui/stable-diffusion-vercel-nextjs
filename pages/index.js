@@ -121,7 +121,7 @@ function Home() {
                 height={500}
                 src={imageUrl}
                 alt="Generated image"
-                className="rounded-xl shadow-lg"
+                className ="rounded-xl shadow-lg"
               />
             </div>
             <div className="flex justify-center mt-4">
